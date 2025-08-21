@@ -1,0 +1,11 @@
+scrapy==2.11.*
+trafilatura==1.7.*
+readability-lxml==0.8.*
+beautifulsoup4==4.12.*
+lxml==5.*
+orjson==3.*
+tldextract==5.*
+python-slugify==8.*
+# Optional (leave commented, enable if needed)
+# playwright==1.47.*
+# scrapy-playwright==0.0.33

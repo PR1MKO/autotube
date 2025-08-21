@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Scrapy cache & outputs
+data/cache/
+data/pages_raw/
+data/pages_jsonl/
+
+# OS/Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
