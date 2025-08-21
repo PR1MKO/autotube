@@ -11,8 +11,10 @@ from excelcrawler.utils import extract as extract_utils
 from excelcrawler.utils import html as html_utils
 from excelcrawler.utils.hashing import hash_content
 
-ALLOW_RE = re.compile(
-    r"^https://learn\.microsoft\.com/([a-z]{2}-[a-z]{2})/office/troubleshoot/excel/.*$"
+ALLOW = re.compile(
+    r"^https://support\.microsoft\.com/([a-z]{2}-[a-z]{2})/"
+    r"(excel/.*|office/.*excel.*)$",
+    re.I
 )
 DENY_EXT = re.compile(r"\.(png|jpg|gif|svg|css|js|mp4|webm|zip|pptx|xlsx|pdf)$", re.I)
 
@@ -32,15 +34,15 @@ def strip_tracking(url: str) -> Optional[str]:
 
 class SupportExcelSpider(CrawlSpider):
     name = "support_excel"
-    allowed_domains = ["learn.microsoft.com"]
+    allowed_domains = ["support.microsoft.com"]
     start_urls = [
-        "https://learn.microsoft.com/en-us/office/troubleshoot/excel/",
-        "https://learn.microsoft.com/hu-hu/office/troubleshoot/excel/",
+        "https://support.microsoft.com/en-us/excel",
+        "https://support.microsoft.com/hu-hu/excel",
     ]
     rules = [
         Rule(
             LinkExtractor(
-                allow=r"/office/troubleshoot/excel/",
+                allow=ALLOW.pattern,
                 process_value=strip_tracking,
             ),
             callback="parse_article",
@@ -54,7 +56,7 @@ class SupportExcelSpider(CrawlSpider):
     def parse_article(self, response):
         html = response.text
         canonical = html_utils.canonical_url(response)
-        m = ALLOW_RE.match(response.url)
+        m = ALLOW.match(response.url)
         locale = m.group(1) if m else "other"
         title = response.css("title::text").get() or ""
         description = response.css('meta[name="description"]::attr(content)').get() or ""

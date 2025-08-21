@@ -1,16 +1,18 @@
-# Python
-__pycache__/
-*.pyc
+# venv
 .venv/
-venv/
 
 # Scrapy cache & outputs
+.scrapy/
 data/cache/
 data/pages_raw/
 data/pages_jsonl/
 
-# OS/Editor
-.DS_Store
-Thumbs.db
+# Python
+__pycache__/
+*.pyc
+
+# Editors/OS
 .vscode/
 .idea/
+.DS_Store
+Thumbs.db

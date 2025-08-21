@@ -11,8 +11,11 @@ from excelcrawler.utils import extract as extract_utils
 from excelcrawler.utils import html as html_utils
 from excelcrawler.utils.hashing import hash_content
 
-ALLOW_RE = re.compile(
-    r"^https://learn\.microsoft\.com/([a-z]{2}-[a-z]{2})/office/excel.*$"
+ALLOW = re.compile(
+    r"^https://learn\.microsoft\.com/([a-z]{2}-[a-z]{2})/"
+    r"(troubleshoot/microsoft-365-apps/excel/.*"
+    r"|office/vba/.*excel.*)$",
+    re.I
 )
 DENY_EXT = re.compile(r"\.(png|jpg|gif|svg|css|js|mp4|webm|zip|pptx|xlsx|pdf)$", re.I)
 
@@ -34,13 +37,16 @@ class LearnExcelSpider(CrawlSpider):
     name = "learn_excel"
     allowed_domains = ["learn.microsoft.com"]
     start_urls = [
-        "https://learn.microsoft.com/en-us/office/excel",
-        "https://learn.microsoft.com/hu-hu/office/excel",
+        "https://learn.microsoft.com/en-us/troubleshoot/microsoft-365-apps/excel/",
+        "https://learn.microsoft.com/hu-hu/troubleshoot/microsoft-365-apps/excel/",
+        # Optional dev docs:
+        # "https://learn.microsoft.com/en-us/office/vba/api/overview/excel",
+        # "https://learn.microsoft.com/hu-hu/office/vba/api/overview/excel",
     ]
     rules = [
         Rule(
             LinkExtractor(
-                allow=r"/office/excel",
+                allow=ALLOW.pattern,
                 process_value=strip_tracking,
             ),
             callback="parse_article",
@@ -54,7 +60,7 @@ class LearnExcelSpider(CrawlSpider):
     def parse_article(self, response):
         html = response.text
         canonical = html_utils.canonical_url(response)
-        m = ALLOW_RE.match(response.url)
+        m = ALLOW.match(response.url)
         locale = m.group(1) if m else "other"
         title = response.css("title::text").get() or ""
         description = response.css('meta[name="description"]::attr(content)').get() or ""
