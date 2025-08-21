@@ -1,38 +1,3 @@
-import re
-from pathlib import Path
-from datetime import datetime
-from urllib.parse import urljoin, urlparse, urlunparse, parse_qsl, urlencode
-from typing import Optional
-
-from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import CrawlSpider, Rule
-
-from excelcrawler.utils import extract as extract_utils
-from excelcrawler.utils import html as html_utils
-from excelcrawler.utils.hashing import hash_content
-
-ALLOW = re.compile(
-    r"^https://learn\.microsoft\.com/([a-z]{2}-[a-z]{2})/"
-    r"(troubleshoot/microsoft-365-apps/excel/.*"
-    r"|office/vba/.*excel.*)$",
-    re.I
-)
-DENY_EXT = re.compile(r"\.(png|jpg|gif|svg|css|js|mp4|webm|zip|pptx|xlsx|pdf)$", re.I)
-
-
-def strip_tracking(url: str) -> Optional[str]:
-    parsed = urlparse(url)
-    if DENY_EXT.search(parsed.path):
-        return None
-    query = [
-        (k, v)
-        for k, v in parse_qsl(parsed.query)
-        if not (k.lower().startswith("wt.") or k.lower() == "ocid")
-    ]
-    parsed = parsed._replace(query=urlencode(query), fragment="")
-    return urlunparse(parsed)
-
-
 class LearnExcelSpider(CrawlSpider):
     name = "learn_excel"
     allowed_domains = ["learn.microsoft.com"]
@@ -44,6 +9,8 @@ class LearnExcelSpider(CrawlSpider):
         # Seed a known Excel troubleshoot article to ensure discovery starts correctly
         "https://learn.microsoft.com/en-us/troubleshoot/microsoft-365-apps/excel/available-resources-errors",
         "https://learn.microsoft.com/hu-hu/troubleshoot/microsoft-365-apps/excel/available-resources-errors",
+    ]
+
     rules = [
         Rule(
             LinkExtractor(
