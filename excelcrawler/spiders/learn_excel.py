@@ -37,12 +37,13 @@ class LearnExcelSpider(CrawlSpider):
     name = "learn_excel"
     allowed_domains = ["learn.microsoft.com"]
     start_urls = [
-        "https://learn.microsoft.com/en-us/troubleshoot/microsoft-365-apps/excel/",
-        "https://learn.microsoft.com/hu-hu/troubleshoot/microsoft-365-apps/excel/",
-        # Optional dev docs:
-        # "https://learn.microsoft.com/en-us/office/vba/api/overview/excel",
-        # "https://learn.microsoft.com/hu-hu/office/vba/api/overview/excel",
-    ]
+        # Microsoft 365 Apps troubleshoot library hub (works; contains links to Excel articles)
+        "https://learn.microsoft.com/en-us/troubleshoot/microsoft-365-apps/office-client-welcome",
+        "https://learn.microsoft.com/hu-hu/troubleshoot/microsoft-365-apps/office-client-welcome",
+
+        # Seed a known Excel troubleshoot article to ensure discovery starts correctly
+        "https://learn.microsoft.com/en-us/troubleshoot/microsoft-365-apps/excel/available-resources-errors",
+        "https://learn.microsoft.com/hu-hu/troubleshoot/microsoft-365-apps/excel/available-resources-errors",
     rules = [
         Rule(
             LinkExtractor(
