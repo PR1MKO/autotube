@@ -1,6 +1,3 @@
-Here’s the **full, corrected file** — copy‑paste as is.
-
-```python
 import re
 from pathlib import Path
 from datetime import datetime
@@ -113,4 +110,3 @@ class LearnExcelSpider(CrawlSpider):
             "sha256": sha,
             "fetched_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
-```
