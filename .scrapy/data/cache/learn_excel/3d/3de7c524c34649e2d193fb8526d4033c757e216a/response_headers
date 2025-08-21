@@ -1,0 +1,27 @@
+Content-Length: 272
+Etag: W/"2fd-198be0a2e38"
+Last-Modified: Mon, 18 Aug 2025 16:36:35 GMT
+Content-Security-Policy: default-src *;script-src 'self' 'unsafe-inline' 'unsafe-eval' *.microsoft.com js.monitor.azure.com dc.services.visualstudio.com try-ppe.dot.net aznb-ame-prod.azureedge.net client-api.arkoselabs.com markdowneditor-public-e0gpfpcwcbbze3ag.b01.azurefd.net markdowneditor-external-Public-fmgmfefddycxdmfj.b01.azurefd.net h64.online-metrix.net;style-src 'self' 'unsafe-inline' *.microsoft.com aznb-ame-prod.azureedge.net try-ppe.dot.net markdowneditor-public-e0gpfpcwcbbze3ag.b01.azurefd.net markdowneditor-external-Public-fmgmfefddycxdmfj.b01.azurefd.net;img-src * data: blob:;frame-ancestors docs.microsoft.com *.docs.microsoft.com learn.microsoft.com *.learn.microsoft.com labclient.labondemand.com portal.azure.com *.portal.azure.com portal.azure.us portal.azure.cn ai.azure.com *.ai.azure.com learn-video.azurefd.net docs.azure.cn *.onecloud.azure-test.net *.sharepoint.com localhost:3000;worker-src 'self' blob: *.microsoft.com aznb-ame-prod.azureedge.net;form-action 'self' *.microsoft.com *.azure.cn *.pearsonvue.com;media-src 'self' blob: *.microsoft.com *.azure.cn videoencodingpublic-hgeaeyeba8gycee3.b01.azurefd.net videoencodingpubdevwus.blob.core.windows.net videoencodingpublicwus.blob.core.windows.net;base-uri 'self';font-src 'self' https: data:;object-src 'none';script-src-attr 'none';upgrade-insecure-requests
+Cross-Origin-Opener-Policy: unsafe-none
+Cross-Origin-Resource-Policy: cross-origin
+Origin-Agent-Cluster: ?1
+Referrer-Policy: strict-origin-when-cross-origin
+X-Content-Type-Options: nosniff
+X-Dns-Prefetch-Control: off
+X-Download-Options: noopen
+X-Frame-Options: SAMEORIGIN
+X-Permitted-Cross-Domain-Policies: none
+X-Xss-Protection: 0
+X-Buildversion: 0.4.03151.7060-a02111b8
+X-Azure-Ref: 20250821T164115Z-15c857d6cd6blhdshC1FRA0duc00000000yg0000000043c8
+Nel: {"report_to":"network-errors","max_age":604800,"success_fraction":0.01,"failure_fraction":1.0}
+Report-To: {"group":"network-errors","max_age":604800,"endpoints":[{"url":"https://mdec.nelreports.net/api/report?cat=mdocs"}]}
+Content-Type: text/plain; charset=UTF-8
+Accept-Ranges: bytes
+Vary: Accept-Encoding
+Content-Encoding: gzip
+Cache-Control: public, max-age=62
+Expires: Thu, 21 Aug 2025 16:51:15 GMT
+Date: Thu, 21 Aug 2025 16:50:13 GMT
+Akamai-Cache-Status: Miss from child, Hit from parent
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload

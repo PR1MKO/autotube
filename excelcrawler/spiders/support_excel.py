@@ -2,21 +2,25 @@ import re
 from pathlib import Path
 from datetime import datetime
 from urllib.parse import urljoin, urlparse, urlunparse, parse_qsl, urlencode
+from typing import Optional
 
-import scrapy
+from scrapy.linkextractors import LinkExtractor
+from scrapy.spiders import CrawlSpider, Rule
 
 from excelcrawler.utils import extract as extract_utils
 from excelcrawler.utils import html as html_utils
 from excelcrawler.utils.hashing import hash_content
 
-ALLOW_RE = re.compile(r"^https://support\.microsoft\.com/([a-z]{2}-[a-z]{2})/excel/.*$")
+ALLOW_RE = re.compile(
+    r"^https://learn\.microsoft\.com/([a-z]{2}-[a-z]{2})/office/troubleshoot/excel/.*$"
+)
 DENY_EXT = re.compile(r"\.(png|jpg|gif|svg|css|js|mp4|webm|zip|pptx|xlsx|pdf)$", re.I)
 
 
-def strip_tracking(url: str) -> str:
+def strip_tracking(url: str) -> Optional[str]:
     parsed = urlparse(url)
     if DENY_EXT.search(parsed.path):
-        return ""
+        return None
     query = [
         (k, v)
         for k, v in parse_qsl(parsed.query)
@@ -26,21 +30,26 @@ def strip_tracking(url: str) -> str:
     return urlunparse(parsed)
 
 
-class SupportExcelSpider(scrapy.Spider):
+class SupportExcelSpider(CrawlSpider):
     name = "support_excel"
-    allowed_domains = ["support.microsoft.com"]
+    allowed_domains = ["learn.microsoft.com"]
     start_urls = [
-        "https://support.microsoft.com/en-us/excel",
-        "https://support.microsoft.com/hu-hu/excel",
+        "https://learn.microsoft.com/en-us/office/troubleshoot/excel/",
+        "https://learn.microsoft.com/hu-hu/office/troubleshoot/excel/",
+    ]
+    rules = [
+        Rule(
+            LinkExtractor(
+                allow=r"/office/troubleshoot/excel/",
+                process_value=strip_tracking,
+            ),
+            callback="parse_article",
+            follow=True,
+        )
     ]
 
-    def parse(self, response):
-        if ALLOW_RE.match(response.url):
-            yield from self.parse_article(response)
-        for href in response.css("a::attr(href)").getall():
-            url = strip_tracking(urljoin(response.url, href))
-            if url and ALLOW_RE.match(url):
-                yield scrapy.Request(url, callback=self.parse)
+    def parse_start_url(self, response):
+        yield from self.parse_article(response)
 
     def parse_article(self, response):
         html = response.text
@@ -54,7 +63,10 @@ class SupportExcelSpider(scrapy.Spider):
         text, tables, code_blocks = extract_utils.extract_content(html, response.url)
         links_out = []
         for href in response.css("a::attr(href)").getall():
-            abs_url = urljoin(response.url, strip_tracking(href))
+            cleaned = strip_tracking(href)
+            if not cleaned:
+                continue
+            abs_url = urljoin(response.url, cleaned)
             if abs_url.startswith("http"):
                 links_out.append(abs_url)
         links_out = sorted(set(links_out))
@@ -70,7 +82,7 @@ class SupportExcelSpider(scrapy.Spider):
             "url": response.url,
             "canonical_url": canonical,
             "locale": locale.lower(),
-            "source": "support",
+            "source": self.name,
             "title": title.strip(),
             "description": description.strip(),
             "breadcrumbs": breadcrumbs,
